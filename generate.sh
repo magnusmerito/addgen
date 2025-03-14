@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Define character sets
+alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
 # Start HTML file
 cat <<'EOF' > index.html
 <!DOCTYPE html>
@@ -24,7 +27,7 @@ cat <<'EOF' > index.html
   </tr>
 EOF
 
-# Array definitions
+# Array definitions for generating random names and addresses
 f1=("Ja" "Jo" "Wi" "He" "Thi" "Ge" "Pe" "Ruu" "Da" "Ma" "Baa" "Flo" "Kla" "Die" "Nie")
 f2=("n" "han" "llem" "ndrik" "js" "rrit" "ter" "d" "arten" "rt" "as" "ris" "derik" "ls")
 pre=("van " "de " "van der " "van den " "van de " "ter " "den " "te " "" "" "" "")
@@ -37,11 +40,12 @@ c2=("dorp" "veld" "burg" "kerk" "broek" "wijk" "zaan" "hoven" "buren" "schede" "
 
 # Generate 100 random addresses
 for i in {1..100}; do
-  first="${f1[$((RANDOM % 15))]}${f2[$((RANDOM % 14))]}"
-  last="${pre[$((RANDOM % 12))]}${l1[$((RANDOM % 15))]}${l2[$((RANDOM % 15))]}"
-  street="${s1[$((RANDOM % 15))]}${s2[$((RANDOM % 15))]} $((RANDOM % 200))"
-  city="${c1[$((RANDOM % 15))]}${c2[$((RANDOM % 15))]}"
-  postal="$((1000+RANDOM%8000))$(cat /dev/urandom | tr -dc 'A-Z' | head -c2)"
+  first="${f1[$((RANDOM % ${#f1[@]}))]}${f2[$((RANDOM % ${#f2[@]}))]}"
+  last="${pre[$((RANDOM % ${#pre[@]}))]}${l1[$((RANDOM % ${#l1[@]}))]}${l2[$((RANDOM % ${#l2[@]}))]}"
+  street="${s1[$((RANDOM % ${#s1[@]}))]}${s2[$((RANDOM % ${#s2[@]}))]} $((RANDOM % 200))"
+  city="${c1[$((RANDOM % ${#c1[@]}))]}${c2[$((RANDOM % ${#c2[@]}))]}"
+  postal="$(printf "%04d" $((1000 + RANDOM % 9000)))${alphabet:$((RANDOM % 26)):1}${alphabet:$((RANDOM % 26)):1}"
+  
   printf "<tr><td>%s %s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n" "$first" "$last" "$street" "$postal" "$city" >> index.html
 done
 
@@ -51,5 +55,4 @@ cat <<'EOF' >> index.html
 </body>
 </html>
 EOF
-
 
