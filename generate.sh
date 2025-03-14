@@ -41,7 +41,7 @@ for i in {1..100}; do
   last="${pre[$((RANDOM % 12))]}${l1[$((RANDOM % 15))]}${l2[$((RANDOM % 15))]}"
   street="${s1[$((RANDOM % 15))]}${s2[$((RANDOM % 15))]} $((RANDOM % 200))"
   city="${c1[$((RANDOM % 15))]}${c2[$((RANDOM % 15))]}"
-  postal="$((1000 + RANDOM % 8000))$(tr -dc A-Z </dev/urandom | head -c2)"
+  postal="$((1000+RANDOM%8000))$(cat /dev/urandom | tr -dc 'A-Z' | head -c2)"
   printf "<tr><td>%s %s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n" "$first" "$last" "$street" "$postal" "$city" >> index.html
 done
 
