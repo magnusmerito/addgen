@@ -35,8 +35,8 @@ s2=("steeg" "gracht" "sloot" "dijk" "kade" "wal" "pad" "gang" "laantje" "wegje" 
 c1=("Kloo" "Breu" "Vlier" "Nes" "Dron" "Grui" "Spaa" "Zwad" "Hels" "Bron" "Vliet" "Kraa" "Smit" "Tuin" "Ruig")
 c2=("dorp" "veld" "burg" "kerk" "broek" "wijk" "zaan" "hoven" "buren" "schede" "stein" "ingen" "donk" "poort" "woude")
 
-# Generate 10 random addresses
-for i in {1..10}; do
+# Generate 100 random addresses
+for i in {1..100}; do
   first="${f1[$((RANDOM % 15))]}${f2[$((RANDOM % 14))]}"
   last="${pre[$((RANDOM % 12))]}${l1[$((RANDOM % 15))]}${l2[$((RANDOM % 15))]}"
   street="${s1[$((RANDOM % 15))]}${s2[$((RANDOM % 15))]} $((RANDOM % 200))"
