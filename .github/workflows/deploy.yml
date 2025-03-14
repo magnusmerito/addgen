@@ -1,9 +1,11 @@
-name: Generate Random Addresses
+name: Generate and Deploy Random Addresses
 
 on:
   push:
+    branches:
+      - main   # Rebuild when pushing changes to the main branch
     tags:
-      - 'v*'   # Trigger on tag pushes that start with 'v'
+      - 'v*'   # Rebuild when pushing a new tag starting with 'v'
 
 jobs:
   build:
@@ -19,24 +21,27 @@ jobs:
 
       - name: Deploy to GitHub Pages using native Git commands
         run: |
-          # Configure Git
+          # Configure Git for commits
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # If gh-pages branch exists, switch to it; if not, create it
+          # If the gh-pages branch exists, switch to it, else create a new orphan branch
           if git ls-remote --exit-code --heads origin gh-pages; then
             git checkout gh-pages
           else
             git checkout --orphan gh-pages
           fi
 
-          # Clean up existing files
-          git rm -rf .
+          # Remove existing files in gh-pages
+          git rm -rf . > /dev/null 2>&1 || true
 
-          # Move the new index.html into place (if not already at root)
+          # Copy the new index.html to the root
           cp index.html .
 
-          # Stage, commit, and force push the changes to gh-pages branch
+          # Stage and commit changes
           git add index.html
           git commit -m "Deploy updated random addresses"
+
+          # Force push to update gh-pages branch
           git push --force origin gh-pages
+
