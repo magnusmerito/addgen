@@ -25,22 +25,23 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # If the gh-pages branch exists, switch to it, else create a new orphan branch
+          # Fetch all remote branches, including gh-pages
+          git fetch origin gh-pages || echo "gh-pages branch does not exist yet."
+
+          # If gh-pages branch exists, switch to it; otherwise, create it
           if git ls-remote --exit-code --heads origin gh-pages; then
             git checkout gh-pages
           else
             git checkout --orphan gh-pages
           fi
 
-          # Remove existing files in gh-pages
-          git rm -rf . > /dev/null 2>&1 || true
+          # Remove old files (only index.html, preserving workflows)
+          rm -f index.html
 
-          # Copy the new index.html to the root
+          # Move the newly generated index.html
           cp index.html .
 
-          # Stage and commit changes
+          # Add, commit, and push the changes
           git add index.html
           git commit -m "Deploy updated random addresses"
-
-          # Force push to update gh-pages branch
           git push --force origin gh-pages
